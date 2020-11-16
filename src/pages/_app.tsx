@@ -1,17 +1,18 @@
 import { AppProps } from 'next/app';
-import axios from 'axios';
 import { SWRConfig } from 'swr';
-import { CustomThemeProvider } from '../contexts/ThemeContext';
+import { ThemeProvider } from 'styled-components';
 import GlobalStyle from '../styles/global';
+import { themes } from '../styles/themes';
+import api from '../services/api';
 
 const MyApp: React.FC<AppProps> = ({ Component, pageProps }) => {
   return (
-    <CustomThemeProvider>
-      <SWRConfig value={{fetcher: (url: string) => axios(url).then(r => r.data)}}>
+    <ThemeProvider theme={themes['dark']}>
+      <SWRConfig value={{fetcher: (url: string) => api.get(url).then(r => r.data)}}>
         <Component {...pageProps} />
       </SWRConfig>
       <GlobalStyle />
-    </CustomThemeProvider>
+    </ThemeProvider>
   );
 }
 
